@@ -1,10 +1,19 @@
 import {
+    SET_CURRENT_VIEW,
     LOAD_EVENTS,
     LOAD_SELECTED_EVENTS,
     SET_FILTER,
     SET_SEARCH,
-    TOGGLE_SELECTED_EVENTS
+    TOGGLE_SELECTED_EVENTS,
+    LOAD_NEW_ORDERS
 } from '../constants/action-types';
+
+export const setCurrentView = (currentView) => {
+    return {
+        type: SET_CURRENT_VIEW,
+        payload: currentView
+    }
+}
 
 export const loadEvents = () =>{
     return {
@@ -37,5 +46,12 @@ export const toggleSelectedEvents = (eventCode) => {
     return {
         type: TOGGLE_SELECTED_EVENTS,
         payload: eventCode
+    }
+}
+
+export const loadNewOrders = (selectedEvents) => {
+    return {
+        type: LOAD_NEW_ORDERS,
+        payload: selectedEvents
     }
 }

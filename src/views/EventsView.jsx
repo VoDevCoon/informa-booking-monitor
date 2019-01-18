@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { loadEvents, loadSelectedEvents } from '../actions';
+import { loadEvents, loadSelectedEvents, setCurrentView } from '../actions';
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -33,9 +33,11 @@ class EventsView extends Component {
         const { classes } = this.props;
 
         const saveSelectedEvents = e => {
+            const { setCurrentView } = this.props;
             e.preventDefault();
             // const { selectedEvents } = store.getState();
             // chrome.storage.local.set({ selectedEvents });
+            setCurrentView("NewOrdersView");
         };
 
         const { events, filter, search, selectedEvents } = this.props;
@@ -84,7 +86,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     loadEvents,
-    loadSelectedEvents
+    loadSelectedEvents,
+    setCurrentView
 };
 
 export default connect(

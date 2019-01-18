@@ -1,5 +1,5 @@
-const eventsViewStyle = {
-    eventsView: {
+const newOrdersViewStyle = {
+    ordersView: {
         margin: "0 auto",
         padding: "0 30px",
         display: "flex",
@@ -13,9 +13,13 @@ const eventsViewStyle = {
             width: "30%"
         }
     },
-    buttonsMargin: {
-        margin:"10px 20px"
+    notice: {
+        display: "flex",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column"
     }
-};
+}
 
-export default eventsViewStyle;
+export default newOrdersViewStyle;

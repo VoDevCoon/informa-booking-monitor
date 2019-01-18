@@ -1,7 +1,7 @@
 const filterStyle = {
     filter: {
         display: "flex",
-        margin: "15px 0",
+        margin: "5px 0",
         justifyContent: "space-between",
         width: "100%"
     },

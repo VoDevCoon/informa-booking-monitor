@@ -1,6 +1,6 @@
 import { TOGGLE_SELECTED_EVENTS, LOAD_SELECTED_EVENTS } from '../constants/action-types';
 
-const selected = [];
+const selected = ["P19M04"];
 
 export default function selectedEvents(state=selected, action) {
     switch (action.type) {
