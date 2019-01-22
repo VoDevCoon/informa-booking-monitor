@@ -4,6 +4,7 @@ import filter from './filter';
 import search from './search';
 import selectedEvents from './selectedEvents';
 import newOrders from './newOrders';
+import selectedEvent from './selectedEvent';
 import { combineReducers } from 'redux';
 
 export default combineReducers({
@@ -12,5 +13,6 @@ export default combineReducers({
     events,
     filter,
     search,
-    selectedEvents
+    selectedEvents,
+    selectedEvent
 });

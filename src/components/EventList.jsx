@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-//import Event from '../containers/Event';
 import Event from '../containers/Event.jsx';
 
 import eventListStyle from '../assets/jss/components/eventListStyle.jsx';

@@ -4,19 +4,19 @@ import { connect } from 'react-redux';
 import { loadEvents, loadSelectedEvents, setCurrentView } from '../actions';
 
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
+import Slide from '@material-ui/core/Slide';
 
 import EventList from '../components/EventList.jsx';
 import Button from '../components/Button.jsx';
-//import Filter from '../containers/Filter';
 import Filter from '../containers/Filter.jsx';
 
 import eventsViewStyle from '../assets/jss/views/eventsViewStyle.jsx';
 
 class EventsView extends Component {
     /* eslint-disable no-undef */
-    componentDidMount(){
+    componentDidMount() {
         loadEvents();
         // chrome.storage.local.get(["selectedEvents"], (data) => {
         //     const selectedEvents = data.selectedEvents == null ? [] : data.selectedEvents;
@@ -25,7 +25,7 @@ class EventsView extends Component {
         // });
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         console.log(this.props);
     }
 
@@ -51,24 +51,26 @@ class EventsView extends Component {
         }
 
         if (search !== "") {
-            filteredEvents = _.filter(filteredEvents, (evt) => 
-                                    evt.eventCode.toLowerCase().includes(search.toLowerCase()) || 
-                                    evt.name.toLowerCase().includes(search.toLowerCase()));
+            filteredEvents = _.filter(filteredEvents, (evt) =>
+                evt.eventCode.toLowerCase().includes(search.toLowerCase()) ||
+                evt.name.toLowerCase().includes(search.toLowerCase()));
         }
 
         return (
-            <div className={classes.eventsView}>    
-                <Filter />
-                <EventList events={filteredEvents} />
-                <div>
-                    <Button color="success" className={classes.buttonsMargin} round>
-                        <Icon>cached</Icon> Reload
+            <Slide direction="right" in>
+                <div className={classes.eventsView}>
+                    <Filter />
+                    <EventList events={filteredEvents} />
+                    <div>
+                        <Button color="success" className={classes.buttonsMargin} round>
+                            <Icon>cached</Icon> Reload
                     </Button>
-                    <Button color="success" className={classes.buttonsMargin} round onClick={saveSelectedEvents}>
-                        <Icon>save</Icon> Save
+                        <Button color="success" className={classes.buttonsMargin} round onClick={saveSelectedEvents}>
+                            <Icon>save</Icon> Save
                     </Button>
+                    </div>
                 </div>
-            </div>
+            </Slide>
         );
     }
 }

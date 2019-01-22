@@ -9,22 +9,19 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '../components/Button.jsx';
 import NewOrdersList from '../containers/NewOrdersList.jsx';
 import newOrdersViewStyle from '../assets/jss/views/newOrdersViewStyle.jsx';
+import { Slide } from '@material-ui/core';
 
 class NewOrdersView extends Component {
 
-    componentDidMount(){
+    componentDidMount() {
         const { selectedEvents, loadNewOrders } = this.props;
-        if (selectedEvents.length > 0){
+        if (selectedEvents.length > 0) {
             loadNewOrders(selectedEvents);
         }
     }
 
-    componentDidUpdate(){
-        console.log(this.props);
-    }
-
     render() {
-        const { classes, selectedEvents, newOrders } = this.props;
+        const { classes, selectedEvents, newOrders, selectedEvent } = this.props;
 
         const updateCurrentView = e => {
             const { setCurrentView } = this.props;
@@ -32,10 +29,13 @@ class NewOrdersView extends Component {
         }
 
         if (selectedEvents.length > 0) {
+            const slideDirection = selectedEvent !== "" ? "right" : "left";
             return (
-                <div className={classes.ordersView}>
-                    <NewOrdersList orders={newOrders}></NewOrdersList>
-                </div>
+                <Slide direction={slideDirection} in>
+                    <div className={classes.ordersView}>
+                        <NewOrdersList orders={newOrders}></NewOrdersList>
+                    </div>
+                </Slide>
             );
         }
         else {
@@ -55,7 +55,8 @@ NewOrdersView.propTypes = {
 
 const mapStateToProps = state => ({
     newOrders: state.newOrders,
-    selectedEvents: state.selectedEvents
+    selectedEvents: state.selectedEvents,
+    selectedEvent: state.selectedEvent
 });
 
 const mapDispatchToProps = {

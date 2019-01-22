@@ -1,13 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import { setCurrentView, setSelectedEvent } from '../actions';
 
-import Card from '../components/Card.jsx';
-import CardHeader from '../components/CardHeader';
-import CardBody from '../components/CardBody';
-import CardFooter from '../components/CardFooter'
+import withStyles from '@material-ui/core/styles/withStyles';
 import Table from '@material-ui/core/Table';
 import TableHead  from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,15 +13,24 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Icon from '@material-ui/core/Icon';
 
+import Card from '../components/Card.jsx';
+import CardHeader from '../components/CardHeader';
+import CardBody from '../components/CardBody';
+import Button from '../components/Button.jsx';
+import store from '../store';
+
 import newOrdersListStyle from '../assets/jss/components/newOrdersListStyle.jsx';
 
 const NewOrdersList = ({...props}) => {
 
-    const { classes, orders } = props;
+    const { classes, orders, setSelectedEvent, setCurrentView } = props;
 
 
     const showEventOrders = e => {
         const eventCode = e.target.dataset.code;
+        setSelectedEvent(eventCode);
+        setCurrentView("EventOrdersView");
+        console.log(store.getState());
     }
 
     const newOrders = [];
@@ -35,7 +42,6 @@ const NewOrdersList = ({...props}) => {
         };
         newOrders.push(order);
     });
-    console.log(newOrders);
     
     let totalBookings = _.sumBy(newOrders, (o) => o.bookings);
     let totalRevenu = _.sumBy(newOrders, (o) => o.revenue);
@@ -65,10 +71,11 @@ const NewOrdersList = ({...props}) => {
                                 <TableCell>{order.bookings}</TableCell>
                                 <TableCell>{order.revenue.toFixed(2)}</TableCell>
                                 <TableCell>
-                                    
-                                    <Icon className={classes.actionButton} data-code={order.code} onClick={showEventOrders}>
-                                        bar_chart
-                                    </Icon>
+                                    <Button size="sm" color="success" className={classes.actionButton}>
+                                        <Icon data-code={order.code} onClick={showEventOrders}>
+                                            bar_chart
+                                        </Icon>
+                                    </Button>
                                 </TableCell>
                         </TableRow>
                             ))}
@@ -79,8 +86,17 @@ const NewOrdersList = ({...props}) => {
     );
 }
 
+
 NewOrdersList.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(newOrdersListStyle)(NewOrdersList);
+const mapDispatchToProps = {
+    setCurrentView,
+    setSelectedEvent
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(withStyles(newOrdersListStyle)(NewOrdersList));

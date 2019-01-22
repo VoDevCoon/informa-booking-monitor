@@ -1,10 +1,10 @@
-const eventsViewStyle = {
-    eventsView: {
+const eventOrdersViewStyle = {
+    eventOrdersView: {
         margin: "0 auto",
         padding: "0 30px",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "start",
         justifyContent: "center",
         '@media (min-width: 768px)':{
             width: "60%"
@@ -13,9 +13,11 @@ const eventsViewStyle = {
             width: "38%"
         }
     },
-    buttonsMargin: {
-        margin:"10px 20px"
+    eventOrders: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
     }
-};
+}
 
-export default eventsViewStyle;
+export default eventOrdersViewStyle;

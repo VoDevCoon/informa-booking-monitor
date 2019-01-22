@@ -10,7 +10,7 @@ const newOrdersViewStyle = {
             width: "60%"
         },
         '@media (min-width: 1440px)':{
-            width: "30%"
+            width: "38%"
         }
     },
     notice: {
