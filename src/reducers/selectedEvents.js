@@ -1,8 +1,6 @@
 import { TOGGLE_SELECTED_EVENTS, LOAD_SELECTED_EVENTS } from '../constants/action-types';
 
-const selected = ["P19M04"];
-
-export default function selectedEvents(state=selected, action) {
+export default function selectedEvents(state=[], action) {
     switch (action.type) {
         case TOGGLE_SELECTED_EVENTS:
             const index = state.indexOf(action.payload);

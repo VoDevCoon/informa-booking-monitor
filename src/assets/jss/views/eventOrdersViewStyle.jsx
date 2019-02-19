@@ -1,23 +1,29 @@
 const eventOrdersViewStyle = {
     eventOrdersView: {
         margin: "0 auto",
-        padding: "0 30px",
+        padding: "0",
         display: "flex",
         flexDirection: "column",
         alignItems: "start",
-        justifyContent: "center",
-        '@media (min-width: 768px)':{
-            width: "60%"
-        },
-        '@media (min-width: 1440px)':{
-            width: "38%"
-        }
+        justifyContent: "center"
     },
     eventOrders: {
         display: "flex",
         flexDirection: "column",
         alignItems: "center"
-    }
+    },
+    cssLabel: {
+        "&$cssFocused": {
+            color: "#26c6da"
+        }
+    },
+    cssFocused: {},
+    cssOutlinedInput: {
+        "&$cssFocused $notchedOutline": {
+            borderColor: "#26c6da"
+        }
+    },
+    notchedOutline: {}
 }
 
 export default eventOrdersViewStyle;

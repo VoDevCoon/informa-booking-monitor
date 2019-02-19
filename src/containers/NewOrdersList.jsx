@@ -17,7 +17,6 @@ import Card from '../components/Card.jsx';
 import CardHeader from '../components/CardHeader';
 import CardBody from '../components/CardBody';
 import Button from '../components/Button.jsx';
-import store from '../store';
 
 import newOrdersListStyle from '../assets/jss/components/newOrdersListStyle.jsx';
 
@@ -30,7 +29,6 @@ const NewOrdersList = ({...props}) => {
         const eventCode = e.target.dataset.code;
         setSelectedEvent(eventCode);
         setCurrentView("EventOrdersView");
-        console.log(store.getState());
     }
 
     const newOrders = [];

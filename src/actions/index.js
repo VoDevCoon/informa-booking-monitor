@@ -1,12 +1,19 @@
 import {
     SET_CURRENT_VIEW,
-    LOAD_EVENTS,
+    LOAD_EVENTS_START,
+    LOAD_EVENTS_SUCCESS,
+    LOAD_EVENTS_ERROR,
     LOAD_SELECTED_EVENTS,
     SET_FILTER,
     SET_SEARCH,
     TOGGLE_SELECTED_EVENTS,
-    LOAD_NEW_ORDERS,
-    SET_SELECTED_EVENT
+    LOAD_NEW_ORDERS_START,
+    LOAD_NEW_ORDERS_ERROR,
+    LOAD_NEW_ORDERS_SUCCESS,
+    SET_SELECTED_EVENT,
+    SET_DATE_RANGE,
+    SHOW_SNACKBAR,
+    HIDE_SNACKBAR
 } from '../constants/action-types';
 
 export const setCurrentView = (currentView) => {
@@ -16,9 +23,61 @@ export const setCurrentView = (currentView) => {
     }
 }
 
-export const loadEvents = () =>{
+export const loadEventsStart = () => {
+    console.log("in loadEventStart");
     return {
-        type: LOAD_EVENTS
+        type: LOAD_EVENTS_START
+    }
+}
+
+export const loadEventsSuccess = (events) => {
+    return {
+        type: LOAD_EVENTS_SUCCESS,
+        payload: events
+    }
+}
+
+export const loadEventsError = () => {
+    return {
+        type: LOAD_EVENTS_ERROR
+    }
+}
+
+export const loadEvents = () => {
+    /* eslint-disable no-undef */
+
+    return (dispatch) => {
+        dispatch(loadEventsStart());
+        chrome.storage.local.get(["cachedEvents"], (data) => {
+
+            const cachedEvents = data.cachedEvents;
+            if (cachedEvents && cachedEvents.events) {
+                const events = cachedEvents.events;
+                const lastUpdated = cachedEvents.lastUpdated;
+
+                dispatch(loadEventsSuccess(cachedEvents));
+                dispatch(showSnackbar("Loaded events from chrome store!", "info"));
+            }
+            else {
+                // fetch("http://13.238.146.198/events/enable")
+                fetch("http://127.0.0.1:3000/events/enable")
+                    .then(
+                        response => response.json(),
+                        error => {
+                            dispatch(loadEventsError());
+                            return Promise.reject(error);
+                        })
+                    .then(
+                        json => {
+                            const fetchedEvents = { events: json, lastUpdated: Date.now() };
+                            dispatch(loadEventsSuccess(fetchedEvents));
+                            chrome.storage.local.set({ cachedEvents: fetchedEvents });
+
+                            dispatch(showSnackbar("Fetching events successfully!", "success"));
+                        })
+                    .catch(error => dispatch(showSnackbar("Fail to fetch events from server.", "error")));
+            }
+        });
     }
 }
 
@@ -50,10 +109,69 @@ export const toggleSelectedEvents = (eventCode) => {
     }
 }
 
-export const loadNewOrders = (selectedEvents) => {
+export const loadNewOrdersStart = () => {
     return {
-        type: LOAD_NEW_ORDERS,
-        payload: selectedEvents
+        type: LOAD_NEW_ORDERS_START
+    }
+}
+
+export const loadNewOrdersError = () => {
+    return {
+        type: LOAD_NEW_ORDERS_ERROR
+    }
+}
+
+export const loadNewOrdersSuccess = (newOrders) => {
+    return {
+        type: LOAD_NEW_ORDERS_SUCCESS,
+        payload: newOrders
+    }
+}
+
+export const loadNewOrders = (selectedEvents) => {
+    /* eslint-disable no-undef */
+
+    return (dispatch) => {
+        dispatch(loadNewOrdersStart());
+        chrome.storage.local.get(["cachedNewOrders"], (data) => {
+            console.log(JSON.stringify(data));
+            const cachedNewOrders = data.cachedNewOrders;
+            if (cachedNewOrders && cachedNewOrders.orders) {
+                const orders = cachedNewOrders.orders;
+                const lastUpdated = cachedNewOrders.lastUpdated;
+
+                dispatch(loadNewOrdersSuccess(cachedNewOrders));
+                dispatch(showSnackbar("Loaded latest daily orders from chrome store!", "info"));
+            }
+            else {
+                // fetch("http://13.238.146.198/orders/today", {
+                fetch("http://127.0.0.1:3000/orders/today", {
+                    method: 'POST',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "events": selectedEvents
+                    })
+                })
+                    .then(
+                        response => response.json(),
+                        error => {
+                            dispatch(loadNewOrdersError());
+                            return Promise.reject(error);
+                        })
+                    .then(
+                        json => {
+                            const fetchedNewOrders = { orders: json, lastUpdated: Date.now() };
+                            dispatch(loadNewOrdersSuccess(fetchedNewOrders));
+                            chrome.storage.local.set({ cachedNewOrders: fetchedNewOrders });
+
+                            dispatch(showSnackbar("Fetching latest daily orders successfully!", "success"));
+                        })
+                    .catch(error => dispatch(showSnackbar(`Fail to fetct latest daily orders from server. Details: ${error.message}`, "error")));
+            }
+        });
     }
 }
 
@@ -61,5 +179,33 @@ export const setSelectedEvent = (eventCode) => {
     return {
         type: SET_SELECTED_EVENT,
         payload: eventCode
+    }
+}
+
+export const setDateRange = (dateRange) => {
+    return {
+        type: SET_DATE_RANGE,
+        payload: dateRange
+    }
+}
+
+export const showSnackbar = (message, variant) => {
+    return {
+        type: SHOW_SNACKBAR,
+        payload: {
+            snackbarOpen: true,
+            snackbarMessage: message,
+            snackbarVariant: variant,
+        }
+    }
+}
+
+export const hideSnackbar = () => {
+    return {
+        type: HIDE_SNACKBAR,
+        payload: {
+            snackbarOpen: false,
+            snackbarMessage: '',
+        }
     }
 }

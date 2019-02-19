@@ -1,10 +1,13 @@
 const appStyle = {
     app: {
-        minWidth: "550px",
-        minHeight: "600px"
+        width: "550px",
+        height: "600px",
+        display: "flex",
+        flexDirection: "column"
     },
     view: {
-        marginTop: "85px"
+        marginTop: "80px",
+        padding: "0 30px"
     }
 };
 

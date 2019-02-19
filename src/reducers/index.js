@@ -5,6 +5,9 @@ import search from './search';
 import selectedEvents from './selectedEvents';
 import newOrders from './newOrders';
 import selectedEvent from './selectedEvent';
+import dateRange from './dateRange';
+import asyncStatus from './asyncStatus';
+import snackbar from './snackbar';
 import { combineReducers } from 'redux';
 
 export default combineReducers({
@@ -14,5 +17,8 @@ export default combineReducers({
     filter,
     search,
     selectedEvents,
-    selectedEvent
+    selectedEvent,
+    dateRange,
+    asyncStatus,
+    snackbar
 });

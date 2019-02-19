@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import Header from '../components/Header.jsx';
+import SnackBar from '../components/SnackBar';
 import EventsView from '../views/EventsView.jsx';
 import NewOrdersView from '../views/NewOrdersView.jsx';
 import EventOrdersView from '../views/EventOrdersView.jsx';
@@ -15,7 +16,8 @@ const App = ({ ...props }) => {
   const { classes, currentView } = props;
 
   const renderView = (currentView) => {
-    console.log("render view: " + currentView);
+    // console.log("render view: " + currentView);
+    // console.log(store.getState());
     switch (currentView) {
       case "EventsView":
         return (
@@ -26,8 +28,8 @@ const App = ({ ...props }) => {
             <NewOrdersView />
         );
       case "EventOrdersView":
-        return (
-            <EventOrdersView />
+        return (<EventOrdersView />
+            
         );
       default:
         return (
@@ -42,6 +44,7 @@ const App = ({ ...props }) => {
       <div className={classes.view}>
         {renderView(currentView)}
       </div>
+      <SnackBar />
     </div>
   );
 }

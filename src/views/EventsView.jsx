@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
 import Slide from '@material-ui/core/Slide';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import EventList from '../components/EventList.jsx';
 import Button from '../components/Button.jsx';
@@ -16,62 +17,93 @@ import eventsViewStyle from '../assets/jss/views/eventsViewStyle.jsx';
 
 class EventsView extends Component {
     /* eslint-disable no-undef */
-    componentDidMount() {
-        loadEvents();
-        // chrome.storage.local.get(["selectedEvents"], (data) => {
-        //     const selectedEvents = data.selectedEvents == null ? [] : data.selectedEvents;
-        //     console.log(selectedEvents);
-        //     store.dispatch(loadSelectedEvents(selectedEvents));
-        // });
-    }
+    componentWillMount() {
+        this.props.loadEvents();
 
-    componentDidUpdate() {
-        console.log(this.props);
+        chrome.storage.local.get(["selectedEvents"], (data) => {
+            const selectedEvents = data.selectedEvents == null ? [] : data.selectedEvents;
+            console.log(`selected events from chrome store: ${selectedEvents}`);
+            this.props.loadSelectedEvents(selectedEvents);
+        });
     }
 
     render() {
         const { classes } = this.props;
 
-        const saveSelectedEvents = e => {
-            const { setCurrentView } = this.props;
+        const invalidCachedEvents = e => {
+            const { loadEvents } = this.props;
             e.preventDefault();
-            // const { selectedEvents } = store.getState();
-            // chrome.storage.local.set({ selectedEvents });
+            chrome.storage.local.set({ cachedEvents: null });
+            loadEvents();
+        }
+
+        const saveSelectedEvents = e => {
+            const { setCurrentView, selectedEvents, loadSelectedEvents } = this.props;
+            e.preventDefault();
+            chrome.storage.local.set({ selectedEvents });
+            loadSelectedEvents(selectedEvents);
+
+            chrome.storage.local.set({ cachedNewOrders: null })
             setCurrentView("NewOrdersView");
         };
 
-        const { events, filter, search, selectedEvents } = this.props;
+        const { asyncStatus, events, filter, search, selectedEvents } = this.props;
 
-        let filteredEvents = [...events];
-        if (filter.toLowerCase() === "selected") {
-            filteredEvents = _.filter(filteredEvents, (evt) => _.includes(selectedEvents, evt.eventCode));
-        }
-        else if (filter.toLowerCase() === "not") {
-            filteredEvents = _.filter(filteredEvents, (evt) => !_.includes(selectedEvents, evt.eventCode));
-        }
-
-        if (search !== "") {
-            filteredEvents = _.filter(filteredEvents, (evt) =>
-                evt.eventCode.toLowerCase().includes(search.toLowerCase()) ||
-                evt.name.toLowerCase().includes(search.toLowerCase()));
-        }
-
-        return (
-            <Slide direction="right" in>
-                <div className={classes.eventsView}>
-                    <Filter />
-                    <EventList events={filteredEvents} />
-                    <div>
-                        <Button color="success" className={classes.buttonsMargin} round>
-                            <Icon>cached</Icon> Reload
-                    </Button>
-                        <Button color="success" className={classes.buttonsMargin} round onClick={saveSelectedEvents}>
-                            <Icon>save</Icon> Save
-                    </Button>
-                    </div>
+        if (asyncStatus.loadEventsStart) {
+            return (
+                <div className={classes.loading}>
+                    <CircularProgress color="primary"></CircularProgress>
                 </div>
-            </Slide>
-        );
+            );
+        }
+        else if (asyncStatus.loadEventsError) {
+            return (
+                <div>
+                    <h4>Error loading events, please check your network connection
+                        or contact <a href="mailto:victor.zhou@informa.com.au">support</a>
+                        to solve the issue.</h4>
+
+                    <Button color="success" className={classes.buttonsMargin} round onClick={invalidCachedEvents}>
+                        <Icon>cached</Icon> Retry
+                    </Button>
+                </div>
+            );
+        }
+        else if (asyncStatus.loadEventsSuccess) {
+            let filteredEvents = [...events.events];
+            if (filter.toLowerCase() === "selected") {
+                filteredEvents = _.filter(filteredEvents, (evt) => _.includes(selectedEvents, evt.eventCode));
+            }
+            else if (filter.toLowerCase() === "not") {
+                filteredEvents = _.filter(filteredEvents, (evt) => !_.includes(selectedEvents, evt.eventCode));
+            }
+
+            if (search !== "") {
+                filteredEvents = _.filter(filteredEvents, (evt) =>
+                    evt.eventCode.toLowerCase().includes(search.toLowerCase()) ||
+                    evt.name.toLowerCase().includes(search.toLowerCase()));
+            }
+
+            return (
+                <Slide direction="right" in>
+
+                    <div className={classes.eventsView}>
+                        <Filter />
+                        <EventList events={filteredEvents} />
+                        <div>
+                            <Button color="success" className={classes.buttonsMargin} round onClick={invalidCachedEvents}>
+                                <Icon>cached</Icon> Reload
+                            </Button>
+                            <Button color="success" className={classes.buttonsMargin} round onClick={saveSelectedEvents}>
+                                <Icon>save</Icon> Save
+                            </Button>
+                        </div>
+
+                    </div>
+                </Slide>
+            );
+        }
+        return (<h1>No events.</h1>);
     }
 }
 
@@ -80,6 +112,7 @@ EventsView.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    asyncStatus: state.asyncStatus,
     events: state.events,
     filter: state.filter,
     search: state.search,
