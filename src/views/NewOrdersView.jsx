@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { loadSelectedEvents, loadNewOrders, setCurrentView, setSelectedEvent } from '../actions';
 
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Button from '../components/Button.jsx';
 import NewOrdersList from '../containers/NewOrdersList.jsx';
 import newOrdersViewStyle from '../assets/jss/views/newOrdersViewStyle.jsx';
-import { Slide } from '@material-ui/core';
+import Slide from '@material-ui/core/Slide';
 
 class NewOrdersView extends Component {
     /* eslint-disable no-undef */
     componentWillMount() {
         const { selectedEvents, loadSelectedEvents, loadNewOrders } = this.props;
-        if (!selectedEvents || selectedEvents.length == 0) {
+        if (!selectedEvents || selectedEvents.length === 0) {
             chrome.storage.local.get(["selectedEvents"], (data) => {
-                const cachedSelectedEvents = data.selectedEvents == null ? [] : data.selectedEvents;
-                console.log(`selected events from chrome store: ${cachedSelectedEvents}`);
+                const cachedSelectedEvents = data.selectedEvents === null ? [] : data.selectedEvents;
+
                 if (cachedSelectedEvents.length > 0) {
                     loadSelectedEvents(cachedSelectedEvents);
                     loadNewOrders(cachedSelectedEvents);
@@ -33,7 +31,7 @@ class NewOrdersView extends Component {
     }
 
     render() {
-        const { asyncStatus, classes, selectedEvents, newOrders, selectedEvent } = this.props;
+        const { classes, selectedEvents, newOrders, selectedEvent } = this.props;
 
         const updateCurrentView = e => {
             const { setCurrentView, setSelectedEvent } = this.props;
@@ -46,8 +44,7 @@ class NewOrdersView extends Component {
             return (
                 <Slide direction={slideDirection} in>
                     <div className={classes.ordersView}>
-                        <NewOrdersList orders={newOrders.orders}></NewOrdersList>
-                        {asyncStatus.loadNewOrdersStart ? <CircularProgress color="primary"></CircularProgress> : ""}
+                        <NewOrdersList orders={newOrders} ></NewOrdersList>
                         <Button data-view="EventsView" color="success" round onClick={updateCurrentView}><Icon>settings</Icon></Button>
                     </div>
                 </Slide>

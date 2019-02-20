@@ -1,11 +1,8 @@
 import {
-    grayColor,
-    primaryColor,
     infoColor,
     successColor,
     warningColor,
-    dangerColor,
-    roseColor
+    dangerColor
   } from '../main.jsx';
 
 const snackbarStyle = {

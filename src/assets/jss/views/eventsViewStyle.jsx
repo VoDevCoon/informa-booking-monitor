@@ -1,8 +1,3 @@
-import {
-    primaryColor,
-    primaryBoxShadow
-  } from "../main.jsx";
-
 const eventsViewStyle = {
     eventsView: {
         margin: "0 auto",
@@ -15,18 +10,7 @@ const eventsViewStyle = {
     buttonsMargin: {
         margin:"10px 20px"
     },
-    loading: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        "& div": {
-            color: primaryColor
-        }
-    },
-    snackbar: {
-        ...primaryBoxShadow
-    }
+    
 };
 
 export default eventsViewStyle;

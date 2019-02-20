@@ -12,9 +12,14 @@ import {
     LOAD_NEW_ORDERS_SUCCESS,
     SET_SELECTED_EVENT,
     SET_DATE_RANGE,
+    LOAD_EVENT_ORDERS_START,
+    LOAD_EVENT_ORDERS_ERROR,
+    LOAD_EVENT_ORDERS_SUCCESS,
     SHOW_SNACKBAR,
     HIDE_SNACKBAR
 } from '../constants/action-types';
+
+const apiRoot = "http://13.238.146.198"
 
 export const setCurrentView = (currentView) => {
     return {
@@ -59,8 +64,7 @@ export const loadEvents = () => {
                 dispatch(showSnackbar("Loaded events from chrome store!", "info"));
             }
             else {
-                // fetch("http://13.238.146.198/events/enable")
-                fetch("http://127.0.0.1:3000/events/enable")
+                fetch(`${apiRoot}/events/enable`)
                     .then(
                         response => response.json(),
                         error => {
@@ -134,7 +138,7 @@ export const loadNewOrders = (selectedEvents) => {
     return (dispatch) => {
         dispatch(loadNewOrdersStart());
         chrome.storage.local.get(["cachedNewOrders"], (data) => {
-            console.log(JSON.stringify(data));
+
             const cachedNewOrders = data.cachedNewOrders;
             if (cachedNewOrders && cachedNewOrders.orders) {
                 const orders = cachedNewOrders.orders;
@@ -144,8 +148,7 @@ export const loadNewOrders = (selectedEvents) => {
                 dispatch(showSnackbar("Loaded latest daily orders from chrome store!", "info"));
             }
             else {
-                // fetch("http://13.238.146.198/orders/today", {
-                fetch("http://127.0.0.1:3000/orders/today", {
+                fetch(`${apiRoot}/orders/today`, {
                     method: 'POST',
                     headers: {
                         "Accept": "application/json",
@@ -186,6 +189,58 @@ export const setDateRange = (dateRange) => {
     return {
         type: SET_DATE_RANGE,
         payload: dateRange
+    }
+}
+
+export const loadEventOrdersStart = () => {
+    return {
+        type: LOAD_EVENT_ORDERS_START
+    }
+}
+
+export const loadEventOrdersError = () => {
+    return {
+        type: LOAD_EVENT_ORDERS_ERROR
+    }
+}
+
+export const loadEventOrdersSuccess = (eventOrders) => {
+    return {
+        type: LOAD_EVENT_ORDERS_SUCCESS,
+        payload: eventOrders
+    }
+}
+
+export const loadEventOrders = (dateRange, selectedEvent) => {
+    return (dispatch) => {
+        dispatch(setDateRange(dateRange));
+        dispatch(loadEventOrdersStart());
+
+        const event = new Array(selectedEvent); // convert to Array to conform api payload format
+
+        fetch(`${apiRoot}/orders/${dateRange.dateRangeSelector}/${dateRange.range}`, {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "events": event
+            })
+        })
+            .then(
+                response => response.json(),
+                error => {
+                    dispatch(loadEventOrdersError());
+                    return Promise.reject(error);
+                })
+            .then(
+                json => {
+                    const fetchedEventOrders = { orders: json, lastUpdated: Date.now() };
+                    dispatch(loadEventOrdersSuccess(fetchedEventOrders));
+                })
+            .catch(error => dispatch(showSnackbar(`Fail to fetct event orders from server. Details: ${error.message}`, "error")));
+
     }
 }
 

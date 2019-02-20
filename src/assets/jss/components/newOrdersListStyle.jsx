@@ -1,7 +1,19 @@
 const newOrdersListStyle = {
+    tableTitle: {
+        color: "#fff",
+        textAlign: "center"
+    },
+    tableSubtitle: {
+        color: "#fff",
+        margin: "15px 0"
+    },
+    caption: {
+        color: "#fff",
+        textAlign: "right"
+    },
     orderList: {
         "& th, td": {
-            padding: "0 !important",
+            padding: "2px !important",
             textAlign: "center"
         }
     },

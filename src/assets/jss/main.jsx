@@ -172,6 +172,10 @@ const cardLink = {
   }
 };
 
+const appTooltip = {
+      fontSize: "10px"
+};
+
 export {
   //variables
   drawerWidth,
@@ -205,5 +209,6 @@ export {
   title,
   cardTitle,
   cardSubtitle,
-  cardLink
+  cardLink,
+  appTooltip
 };

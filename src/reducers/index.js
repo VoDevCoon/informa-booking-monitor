@@ -6,6 +6,7 @@ import selectedEvents from './selectedEvents';
 import newOrders from './newOrders';
 import selectedEvent from './selectedEvent';
 import dateRange from './dateRange';
+import eventOrders from './eventOrders';
 import asyncStatus from './asyncStatus';
 import snackbar from './snackbar';
 import { combineReducers } from 'redux';
@@ -19,6 +20,7 @@ export default combineReducers({
     selectedEvents,
     selectedEvent,
     dateRange,
+    eventOrders,
     asyncStatus,
     snackbar
 });

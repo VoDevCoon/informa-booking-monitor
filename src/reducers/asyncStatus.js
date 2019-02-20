@@ -5,6 +5,9 @@ import {
     LOAD_NEW_ORDERS_ERROR,
     LOAD_NEW_ORDERS_START,
     LOAD_NEW_ORDERS_SUCCESS,
+    LOAD_EVENT_ORDERS_ERROR,
+    LOAD_EVENT_ORDERS_START,
+    LOAD_EVENT_ORDERS_SUCCESS
 } from '../constants/action-types'
 
 const initialState = {
@@ -13,7 +16,10 @@ const initialState = {
     loadEventsSuccess: false,
     loadNewOrdersStart: false,
     loadNewOrdersError: false,
-    loadNewOrdersSuccess: false
+    loadNewOrdersSuccess: false,
+    loadEventOrdersStart: false,
+    loadEventOrdersError: false,
+    loadEventOrdersSuccess: false
 };
 
 export default function asyncStatus(state = initialState, action) {
@@ -72,6 +78,33 @@ export default function asyncStatus(state = initialState, action) {
                     loadNewOrdersSuccess: false
                 }
             };
+        case LOAD_EVENT_ORDERS_START:
+        return {
+            ...state,
+            ...{
+                loadEventOrdersStart: true,
+                loadEventOrdersError: false,
+                loadEventOrdersSuccess: false
+            }
+        };
+        case LOAD_EVENT_ORDERS_ERROR:
+        return {
+            ...state,
+            ...{
+                loadEventOrdersStart: false,
+                loadEventOrdersError: true,
+                loadEventOrdersSuccess: false
+            }
+        };
+        case LOAD_EVENT_ORDERS_SUCCESS:
+        return {
+            ...state,
+            ...{
+                loadEventOrdersStart: false,
+                loadEventOrdersError: false,
+                loadEventOrdersSuccess: true
+            }
+        };
         default:
             return state;
     }

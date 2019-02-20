@@ -21,7 +21,7 @@ import bookingChartStyle from '../assets/jss/components/bookingChartStyle';
 
 const BookingChart = ({ ...props }) => {
 
-    const { classes, eventOrders, timeRange, color, dataType, chartType } = props;
+    const { classes, eventOrders, color, dataType, chartType } = props;
 
     // construct chart data
     const labels = [];
@@ -40,7 +40,6 @@ const BookingChart = ({ ...props }) => {
         gridData.push({ [value]: data[key] });
     });
 
-
     // chart styles
     const labelOffset = dataType === "revenue" ? 0 : -10;
     const chartName = dataType === "revenue" ? "Daily Revenue ($)" : "Daily Bookings";
@@ -57,7 +56,7 @@ const BookingChart = ({ ...props }) => {
                 tension: 0
             }),
             low: _.min(data),
-            high: _.max(data) * 1.2,
+            high: _.max(data) * 1.2 === 0 ? 1000 : _.max(data) * 1.2,
             chartPadding: {
                 top: 0,
                 right: 0,

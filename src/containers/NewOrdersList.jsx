@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 
 import { setCurrentView, setSelectedEvent } from '../actions';
 
@@ -12,6 +13,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Icon from '@material-ui/core/Icon';
+import Typography from '@material-ui/core/Typography';
 
 import Card from '../components/Card.jsx';
 import CardHeader from '../components/CardHeader';
@@ -24,22 +26,23 @@ const NewOrdersList = ({...props}) => {
 
     const { classes, orders, setSelectedEvent, setCurrentView } = props;
 
-
     const showEventOrders = e => {
         const eventCode = e.target.dataset.code;
         setSelectedEvent(eventCode);
         setCurrentView("EventOrdersView");
     }
 
-    const newOrders = [];
-
-    _.forEach(orders, (value, key) => {
+    const os = orders.orders;
+    let newOrders = [];
+    _.forEach(os, (value, key) => {
         const order = {
             code: key,
             ...value
         };
         newOrders.push(order);
     });
+
+    newOrders = _.orderBy(newOrders, 'revenue', 'desc');
     
     let totalBookings = _.sumBy(newOrders, (o) => o.bookings);
     let totalRevenu = _.sumBy(newOrders, (o) => o.revenue);
@@ -48,11 +51,16 @@ const NewOrdersList = ({...props}) => {
     return (
         <Card>
             <CardHeader color="success">
-                <h4 className={classes.tableTitle}>TODAY'S BOOKINGS FOR YOUR SELECTED EVENTS</h4>
-                <p className={classes.tableSubtitle}>
+                <Typography variant="subtitle2" className={classes.tableTitle}>TODAY'S BOOKINGS FOR YOUR SELECTED EVENTS</Typography>
+                <Typography variant="body1" className={classes.tableSubtitle}>
                     Total Bookings: {totalBookings}<br />
                     Total Revenue: ${totalRevenu.toFixed(2)}
-                </p>
+                </Typography>
+                <Typography 
+                    variant="caption" 
+                    className={classes.caption}>
+                    Last updated: {moment(orders.lastUpdated).format('YYYY-MM-DD HH:mm:ss')}
+                </Typography>
             </CardHeader>
             <CardBody>
                 <Table className={classes.orderList}>

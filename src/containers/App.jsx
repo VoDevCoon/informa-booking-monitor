@@ -13,7 +13,7 @@ import EventOrdersView from '../views/EventOrdersView.jsx';
 import appStyle from '../assets/jss/components/appStyle.jsx';
 
 const App = ({ ...props }) => {
-  const { classes, currentView } = props;
+  const { classes, currentView, asyncStatus } = props;
 
   const renderView = (currentView) => {
     // console.log("render view: " + currentView);
@@ -40,7 +40,7 @@ const App = ({ ...props }) => {
 
   return (
     <div className={classes.app}>
-      <Header className={classes.header} />
+      <Header className={classes.header} asyncStatus={asyncStatus}/>
       <div className={classes.view}>
         {renderView(currentView)}
       </div>
@@ -54,6 +54,7 @@ App.propTypes = {
 }
 
 const mapStateToProps = state => ({
+  asyncStatus: state.asyncStatus,
   currentView: state.currentView
 });
 
