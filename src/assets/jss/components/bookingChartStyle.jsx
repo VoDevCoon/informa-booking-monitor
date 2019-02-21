@@ -29,9 +29,8 @@ const bookingChartStyle = {
                 backgroundColor: "#f2f2f2"
             }
         },
-        "& tfoot td": {
-            textAlign: "right",
-            fontWeight: "600"
+        stats: {
+            textAlign: "right"
         }
     }
 }

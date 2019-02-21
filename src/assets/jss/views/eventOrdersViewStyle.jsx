@@ -13,18 +13,27 @@ const eventOrdersViewStyle = {
         alignItems: "center",
         width: "100%"
     },
-    cssLabel: {
-        "&$cssFocused": {
-            color: "#26c6da"
-        }
+    eventCode: {
+        margin: "0",
     },
-    cssFocused: {},
-    cssOutlinedInput: {
-        "&$cssFocused $notchedOutline": {
-            borderColor: "#26c6da"
-        }
+    eventName: {
+        margin: "0 0 15px 0",
     },
-    notchedOutline: {}
+    searchBar: {
+        margin: "0 0 10px 0"
+    },
+    dateRangeSelector: {
+        padding: "0 20px",
+        margin: "0 5px"
+    },
+    underline:{
+        '&:after': {
+          borderBottom: "2px solid #00acc1"
+        }  
+    },
+    '&:hover:not($disabled):not($focused):not($error):before': {
+        borderBottom: "`2px solid #999999"
+    }
 }
 
 export default eventOrdersViewStyle;

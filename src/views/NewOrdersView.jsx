@@ -15,18 +15,19 @@ class NewOrdersView extends Component {
     /* eslint-disable no-undef */
     componentWillMount() {
         const { selectedEvents, loadSelectedEvents, loadNewOrders } = this.props;
-        if (!selectedEvents || selectedEvents.length === 0) {
+
+        if (selectedEvents && selectedEvents.length > 0) {
+            loadNewOrders(selectedEvents);
+        }
+        else {
             chrome.storage.local.get(["selectedEvents"], (data) => {
-                const cachedSelectedEvents = data.selectedEvents === null ? [] : data.selectedEvents;
+                const cachedSelectedEvents = data.selectedEvents ? data.selectedEvents: [];
 
                 if (cachedSelectedEvents.length > 0) {
                     loadSelectedEvents(cachedSelectedEvents);
                     loadNewOrders(cachedSelectedEvents);
                 }
             });
-        }
-        else {
-            loadNewOrders(selectedEvents);
         }
     }
 

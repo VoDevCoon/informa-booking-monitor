@@ -10,6 +10,7 @@ import Slide from '@material-ui/core/Slide';
 import Select from '@material-ui/core/Select';
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from '@material-ui/core/Typography';
+import Input from '@material-ui/core/Input';
 import BookingChart from '../containers/BookingChart';
 import Button from '../components/Button';
 
@@ -38,7 +39,7 @@ class EventOrdersView extends Component {
             let range = dateRange.range;
             range = range + value > 0 ? range + value : 0;
             const newDateRange = { range, dateRangeSelector: dateRange.dateRangeSelector };
-            
+
             loadEventOrders(newDateRange, selectedEvent);
         };
 
@@ -46,7 +47,7 @@ class EventOrdersView extends Component {
             const { loadEventOrders } = this.props;
             const dateRangeSelector = e.target.value;
             const newDateRange = { "range": 0, dateRangeSelector };
-            
+
             loadEventOrders(newDateRange, selectedEvent);
         };
 
@@ -63,7 +64,7 @@ class EventOrdersView extends Component {
 
         const dateEnd = dateRange.dateRangeSelector === "week"
             ? moment(dateFrom).add(6, "days").format("YYYY-MM-DD")
-            : moment(dateFrom).add(moment(dateFrom).daysInMonth()-1, "days").format("YYYY-MM-DD");
+            : moment(dateFrom).add(moment(dateFrom).daysInMonth() - 1, "days").format("YYYY-MM-DD");
 
         return (
             <Slide direction="left" in>
@@ -72,23 +73,33 @@ class EventOrdersView extends Component {
                         <Icon>arrow_back</Icon>
                     </Button>
                     <div className={classes.eventOrders}>
-                        <Typography variant="subtitle2" className={classes.cardTitle}>
-                            {eventOrders.orders[0].eventCode} | {eventOrders.orders[0].eventName}</Typography>
+                        <Typography variant="h6" className={classes.eventCode}>
+                            {eventOrders.orders[0].eventCode}</Typography>
+                        <Typography variant="subtitle1" className={classes.eventName}>{eventOrders.orders[0].eventName}</Typography>
+                        <Typography variant="body1">From: {dateFrom.toString()}  To: {dateEnd.toString()}</Typography>
                         <div className={classes.searchBar}>
                             <Button size="sm" color="white" data-value="1" onClick={updateRange}><Icon>keyboard_arrow_left</Icon></Button>
                             <Select value={dateRange.dateRangeSelector}
-                                onChange={updagteDateRangeSelector}>
+                                onChange={updagteDateRangeSelector}
+                                className={classes.dateRangeSelector}
+                                input={
+                                    <Input
+                                        classes={{
+                                            underline: classes.underline
+                                        }}
+                                    />
+                                }
+                            >
                                 <MenuItem value={"week"}>Weekly</MenuItem>
                                 <MenuItem value={"month"}>Monthly</MenuItem>
                             </Select>
                             <Button size="sm" color="white" data-value="-1" onClick={updateRange}><Icon>keyboard_arrow_right</Icon></Button>
                         </div>
-                        <Typography variant="subtitle2">From: {dateFrom.toString()}  To: {dateEnd.toString()}</Typography>
                     </div>
                     <BookingChart color="success" eventOrders={eventOrders.orders[0]} dataType="bookings" chartType="Line" />
                     <BookingChart color="warning" eventOrders={eventOrders.orders[0]} dataType="revenue" chartType="Bar" />
-                </div>
-            </Slide>
+                </div >
+            </Slide >
         );
     }
 }

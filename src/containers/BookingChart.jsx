@@ -18,6 +18,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
 import bookingChartStyle from '../assets/jss/components/bookingChartStyle';
+import { Typography } from '@material-ui/core';
 
 const BookingChart = ({ ...props }) => {
 
@@ -107,7 +108,7 @@ const BookingChart = ({ ...props }) => {
 
     return (
         <Fragment>
-            <h5>{chartName}</h5>
+            <Typography variant="subtitle1">{chartName}</Typography>
             <Card chart>
                 <CardHeader color={color}>
                     <ChartistGraph
@@ -133,17 +134,12 @@ const BookingChart = ({ ...props }) => {
                                 </TableRow>
                             ))}
                         </TableBody>
-                        <TableFooter>
-                            <TableRow>
-                                <TableCell>TOTAL: {total}</TableCell>
-                            </TableRow>
-                        </TableFooter>
                     </Table>
                 </CardBody>
                 <CardFooter chart>
-                    <div className={classes.stats}>
-                        updated 4 minutes ago
-                    </div>
+                    <Typography variant="subtitle2" className={classes.stats}>
+                        TOTAL: {total}
+                    </Typography>
                 </CardFooter>
             </Card>
         </Fragment>

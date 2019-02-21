@@ -59,7 +59,7 @@ const NewOrdersList = ({...props}) => {
                 <Typography 
                     variant="caption" 
                     className={classes.caption}>
-                    Last updated: {moment(orders.lastUpdated).format('YYYY-MM-DD HH:mm:ss')}
+                    Last updated: {Math.floor((Date.now() - orders.lastUpdated)/1000/60)} min ago
                 </Typography>
             </CardHeader>
             <CardBody>
