@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import moment from 'moment-timezone';
 
 import { setCurrentView, setSelectedEvent } from '../actions';
 

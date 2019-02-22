@@ -12,6 +12,15 @@
     "default_popup": "index.html",
     "default_title": "Informa Booking Monitor"
   },
-  "permissions":  ["storage"],
+  "permissions": [
+    "storage",
+    "alarms",
+    "notifications"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
   "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk=' https://cdn.jsdelivr.net; object-src 'self'"
 }
