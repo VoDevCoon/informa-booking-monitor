@@ -57,11 +57,8 @@ export const loadEvents = () => {
 
             const cachedEvents = data.cachedEvents;
             if (cachedEvents && cachedEvents.events) {
-                const events = cachedEvents.events;
-                const lastUpdated = cachedEvents.lastUpdated;
-
                 dispatch(loadEventsSuccess(cachedEvents));
-                dispatch(showSnackbar("Loaded events from chrome store!", "info"));
+                dispatch(showSnackbar("Loaded events from chrome data store!", "info"));
             }
             else {
                 fetch(`${apiRoot}/events/enable`)
@@ -141,11 +138,8 @@ export const loadNewOrders = (selectedEvents) => {
 
             const cachedNewOrders = data.cachedNewOrders;
             if (cachedNewOrders && cachedNewOrders.orders) {
-                const orders = cachedNewOrders.orders;
-                const lastUpdated = cachedNewOrders.lastUpdated;
-
                 dispatch(loadNewOrdersSuccess(cachedNewOrders));
-                dispatch(showSnackbar("Loaded latest daily orders from chrome store!", "info"));
+                dispatch(showSnackbar("Loaded latest daily orders from chrome data store!", "info"));
             }
             else {
                 fetch(`${apiRoot}/orders/today`, {
@@ -169,6 +163,7 @@ export const loadNewOrders = (selectedEvents) => {
                             const fetchedNewOrders = { orders: json, lastUpdated: Date.now() };
                             dispatch(loadNewOrdersSuccess(fetchedNewOrders));
                             chrome.storage.local.set({ cachedNewOrders: fetchedNewOrders });
+                            chrome.browserAction.setBadgeText({ text: caculateNewOrders(fetchedNewOrders.orders).toString() });
 
                             dispatch(showSnackbar("Fetching latest daily orders successfully!", "success"));
                         })

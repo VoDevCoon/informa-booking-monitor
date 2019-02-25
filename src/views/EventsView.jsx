@@ -22,7 +22,6 @@ class EventsView extends Component {
 
         chrome.storage.local.get(["selectedEvents"], (data) => {
             const selectedEvents = data.selectedEvents == null ? [] : data.selectedEvents;
-            console.log(`selected events from chrome store: ${selectedEvents}`);
             this.props.loadSelectedEvents(selectedEvents);
         });
     }
@@ -41,8 +40,6 @@ class EventsView extends Component {
             const { setCurrentView, selectedEvents, loadSelectedEvents } = this.props;
             e.preventDefault();
             chrome.storage.local.set({ selectedEvents });
-            loadSelectedEvents(selectedEvents);
-
             chrome.storage.local.set({ cachedNewOrders: null })
             setCurrentView("NewOrdersView");
         };

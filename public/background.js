@@ -1,6 +1,6 @@
 const orderRefreshAlarm = "order_refresh";
 const eventRefreshAlarm = "event_refresh";
-const apiRoot = "http://13.238.146.198";
+const apiRoot = "";
 
 const caculateNewOrders = (fetchedOrders) => {
     let newBookings = 0;
@@ -31,7 +31,7 @@ chrome.browserAction.setBadgeBackgroundColor({ color: "#ff0000" });
 
 chrome.runtime.onInstalled.addListener(() => {
     chrome.alarms.create(orderRefreshAlarm, {
-        periodInMinutes: 15
+        periodInMinutes: 5
     });
 
     chrome.alarms.create(eventRefreshAlarm, {
