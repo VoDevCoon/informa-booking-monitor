@@ -19,7 +19,7 @@ import {
     HIDE_SNACKBAR
 } from '../constants/action-types';
 
-const apiRoot = "http://13.238.146.198"
+const apiRoot = "";
 
 export const setCurrentView = (currentView) => {
     return {
